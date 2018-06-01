@@ -8,22 +8,28 @@ import java.io.OutputStream;
 
 public class Route {
 
-    @WebRoute("/test")
-    public void onTest(HttpExchange requestData) throws IOException {
-        String response = "You are on the test page.";
+    public void buildPage(HttpExchange requestData, String response) throws IOException {
         requestData.sendResponseHeaders(200, response.length());
         OutputStream os = requestData.getResponseBody();
         os.write(response.getBytes());
         os.close();
     }
 
+    @WebRoute("/test")
+    public void onTest(HttpExchange requestData) throws IOException {
+        String response = "You are on the test page.";
+        buildPage(requestData, response);
+    }
+
     @WebRoute("/login")
     public void onLogin(HttpExchange requestData) throws IOException {
         String response = "This is the login page.";
-        requestData.sendResponseHeaders(200, response.length());
-        OutputStream os = requestData.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+        buildPage(requestData, response);
+    }
+
+    public void notValidPage(HttpExchange requestData) throws IOException {
+        String response = "Page not Found";
+        buildPage(requestData, response);
     }
 
 }
